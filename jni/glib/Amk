@@ -1,0 +1,9 @@
+MAKEFILE_PATH := $(call my-dir)
+GLIB_SOURCES_PATH := $(MAKEFILE_PATH)/distsrc
+LOCAL_PATH:= $(GLIB_SOURCES_PATH)/glib
+include $(CLEAR_VARS)
+LOCAL_MODULE    := glib
+LOCAL_SRC_FILES := $(MAKEFILE_PATH)/libglib.so
+export GLIB_INCLUDES := $(MAKEFILE_PATH)/include $(GLIB_SOURCES_PATH) \
+                        $(GLIB_SOURCES_PATH)/gmodule $(LOCAL_PATH) $(LOCAL_PATH)/pcre
+include $(BUILD_SHARED_LIBRARY)

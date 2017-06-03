@@ -1,0 +1,110 @@
+/*************************************************************************
+ File Name: main.java
+ Author: aqqw_ouyang
+ Mail: hualiang0305@foxmail.com 
+ Created Time: 2017年05月25日 星期四 16时57分51秒
+ ************************************************************************/
+package com.example.native_activity1;
+
+import android.app.NativeActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.util.Log;
+
+import java.awt.BorderLayout;  
+import java.awt.Component;  
+import javax.swing.JFrame;  
+import javax.swing.JLabel;  
+import javax.swing.JPanel;  
+import javax.swing.JTextField;  
+import javax.swing.UIManager;  
+  
+public class day21 extends JFrame {  
+  
+    public day21(String title) throws Exception {  
+        super(title);  
+        // TODO Auto-generated constructor stub  
+        this.setSize(300,100);  
+        this.setLocation(300, 200);  
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());  
+        this.setLayout(new BorderLayout());  
+        this.add(getLabel(),BorderLayout.NORTH);  
+        this.add(getNamePwdPandel(),BorderLayout.SOUTH);  
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+        this.setVisible(true);  
+    }  
+    private Component getLabel(){  
+        JPanel panel = new JPanel();  
+        panel.add(new JLabel("用户登录"),BorderLayout.CENTER);  
+        return panel;  
+    }  
+    private Component getNamePwdPandel() {  
+        // TODO Auto-generated method stub  
+        JPanel panel = new JPanel();  
+        panel.setLayout(new BorderLayout());  
+        JLabel jlabel = new JLabel("用户名");  
+        JTextField name = new JTextField();  
+        panel.add(jlabel,BorderLayout.WEST);  
+        panel.add(name,BorderLayout.CENTER);  
+        return panel;  
+    }  
+    public static void main(String[] args) throws Exception{  
+        day21 DAY21 = new day21("标签和文本框");  
+    }  
+}  
+/*
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+ 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+ 
+public class Demo {
+     public static void main(String args[])throws Exception{
+            NewFrame frame1 = new NewFrame();
+            frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//一定要设置关闭
+ 
+            frame1.setVisible(true);
+        }
+}
+ 
+class NewFrame extends JFrame{
+    private JButton button1;
+    private JTextField text1;
+    public NewFrame(){
+        super();
+        this.setSize(300,200);
+        this.getContentPane().setLayout(null);
+        this.add(this.getTextField(),null);
+        this.add(this.getButton(),null);
+        this.setTitle("Demo");
+ 
+    }
+     
+    private JTextField getTextField(){
+        if(text1==null){
+            text1 = new JTextField();
+            text1.setBounds(96,49,160,20);
+        }
+        return text1;
+    }
+     
+    private JButton getButton(){
+        if(button1==null){
+            button1 = new JButton();
+            button1.setBounds(103,110,71,27);
+            button1.setText("button");
+            button1.addActionListener(new HelloButton());//添加监听器类，其主要的响应都由监听器类的方法实现
+ 
+        }
+        return button1;
+    }
+     
+    private class HelloButton implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            text1.setText(button1.getText());
+        }
+    }
+}*/

@@ -1,0 +1,14 @@
+MAKEFILE_PATH := $(call my-dir)
+FFI_SOURCES_PATH := $(MAKEFILE_PATH)/distsrc
+LOCAL_PATH:= $(FFI_SOURCES_PATH)
+
+include $(CLEAR_VARS)
+
+ffi_os := linux
+LOCAL_MODULE := ffi
+LOCAL_SRC_FILES := $(MAKEFILE_PATH)/../../libs/armeabi/libffi.so
+export FFI_INCLUDES := $(LOCAL_PATH)/$(ffi_os)-$(ffi_arch) $(LOCAL_PATH)/include $(FFI_SOURCES_PATH)/linux-x86
+
+include $(PRBUILT_SHARED_LIBRARY)
+
+
