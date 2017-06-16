@@ -2842,13 +2842,19 @@ gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
   GFile *file;
   char *uri, *escaped;
 
+    
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+    
   g_return_if_fail (resource_path != NULL);
+    
 
   escaped = g_uri_escape_string (resource_path,
 				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
+    
   uri = g_strconcat ("resource://", escaped, NULL);
+    
   g_free (escaped);
+    
 
   file = g_file_new_for_uri (uri);
   g_free (uri);
@@ -2915,11 +2921,15 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
 {
   gchar *subpath, *path;
   gchar *resource_path;
+    
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
+    
   g_return_if_fail (name != NULL);
+    
 
   gtk_css_provider_reset (provider);
+    
 
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
@@ -2931,6 +2941,7 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
+    
       gtk_css_provider_load_from_resource (provider, resource_path);
       g_free (resource_path);
       return;

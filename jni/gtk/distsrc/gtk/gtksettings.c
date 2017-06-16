@@ -100,9 +100,10 @@
  * to use gtk_widget_get_settings(). gtk_settings_get_default() returns the
  * GtkSettings instance for the default screen.
  */
+#ifdef ANDROID
 #include <android/log.h>
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN,"native-activity",__VA_ARGS__))
-
+#endif
 #define DEFAULT_TIMEOUT_INITIAL 500
 #define DEFAULT_TIMEOUT_REPEAT   50
 #define DEFAULT_TIMEOUT_EXPAND  500

@@ -45,10 +45,11 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#ifdef ANDROID
 #include <android/log.h>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
-
+#endif
 /**
  * SECTION:gtkcssprovider
  * @Short_description: CSS-like styling for widgets
@@ -2842,19 +2843,19 @@ gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
   GFile *file;
   char *uri, *escaped;
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   g_return_if_fail (resource_path != NULL);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   escaped = g_uri_escape_string (resource_path,
 				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   uri = g_strconcat ("resource://", escaped, NULL);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   g_free (escaped);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   file = g_file_new_for_uri (uri);
   g_free (uri);
@@ -2921,15 +2922,15 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
 {
   gchar *subpath, *path;
   gchar *resource_path;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   g_return_if_fail (name != NULL);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   gtk_css_provider_reset (provider);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
@@ -2941,7 +2942,7 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       gtk_css_provider_load_from_resource (provider, resource_path);
       g_free (resource_path);
       return;

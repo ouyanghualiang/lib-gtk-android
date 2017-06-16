@@ -1,0 +1,38 @@
+# GTK+ Input Method Modules file
+# Automatically generated file, do not edit
+# Created by /home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/gtk/.libs/lt-gtk-query-immodules-3.0 from gtk+-3.12.2
+#
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-am-et.la" 
+"am_et" "Amharic (EZ+)" "gtk30" "/usr/local/share/locale" "am" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-cedilla.la" 
+"cedilla" "Cedilla" "gtk30" "/usr/local/share/locale" "az:ca:co:fr:gv:oc:pt:sq:tr:wa" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-cyrillic-translit.la" 
+"cyrillic_translit" "Cyrillic (Transliterated)" "gtk30" "/usr/local/share/locale" "" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-inuktitut.la" 
+"inuktitut" "Inuktitut (Transliterated)" "gtk30" "/usr/local/share/locale" "iu" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-ipa.la" 
+"ipa" "IPA" "gtk30" "/usr/local/share/locale" "" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-multipress.la" 
+"multipress" "Multipress" "gtk30" "" "" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-thai.la" 
+"thai" "Thai-Lao" "gtk30" "/usr/local/share/locale" "lo:th" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-ti-er.la" 
+"ti_er" "Tigrigna-Eritrean (EZ+)" "gtk30" "/usr/local/share/locale" "ti" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-ti-et.la" 
+"ti_et" "Tigrigna-Ethiopian (EZ+)" "gtk30" "/usr/local/share/locale" "ti" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-viqr.la" 
+"viqr" "Vietnamese (VIQR)" "gtk30" "/usr/local/share/locale" "vi" 
+
+"/home/ouyang/aqqw/lib-native-activity/jni/gtk/distsrc/modules/input/im-xim.la" 
+"xim" "X Input Method" "gtk30" "/usr/local/share/locale" "ko:ja:th:zh" 
+
+

@@ -129,7 +129,18 @@
 #include "gtkwindowprivate.h"
 
 #include "a11y/gtkaccessibility.h"
-
+#include "gtkbutton.h"
+#include "gtkentry.h"
+#include "deprecated/gtktable.h"
+#include "gtkeditable.h"
+#ifdef ANDROID
+#include <android/log.h>
+#define LOGI(...)		((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
+#define LOGW(...)		((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+#define LOGE(...)		((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+#define g_print(...)    ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+#define printf(...)     ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+#endif
 /* Private type definitions
  */
 typedef struct _GtkKeySnooperData        GtkKeySnooperData;
@@ -1491,9 +1502,148 @@ rewrite_event_for_grabs (GdkEvent *event)
  * 
  * 5. After finishing the delivery the event is popped from the event stack.
  */
+ 
+ /*aqqw_ouyang add*/
+ char buf[50] = "";  
+  
+void deal_num(GtkWidget *button, gpointer data)  
+{  
+   // GtkButton * button = (GtkButton*)widget;
+    const char *text = gtk_button_get_label(button);  
+  
+    //退个操作  
+    if (0 == strcmp(text, "c")) {  
+            buf[strlen(buf) - 1] = 0;  
+    }  
+    else  
+    {  
+        int a = 0, b = 0;  
+        char c;  
+        strcat(buf,text);  
+  
+        if (0 == strcmp("=", text)) {  
+            printf("text==##%s##\n",text);  
+            sscanf(buf, "%d%c%d", &a, &c, &b);  
+  
+            printf("---------001-----%c--\n",c);  
+            if ('+' == c) {  
+                    sprintf(buf,"%d", a+b);  
+            }  
+            else if ('-' == c) {  
+                    sprintf(buf, "%d", a-b);  
+            }  
+            else if ('*' == c) {  
+                    sprintf(buf, "%d", a*b);  
+            }  
+            else if ('/' == c) {  
+                    sprintf(buf, "%d", a/b);  
+            }  
+  
+        }  
+    }  
+  
+    gtk_entry_set_text(GTK_ENTRY(data), buf);  
+  
+    return;  
+}  
+GtkWidget *window_keyboard;
+int gtk_jsq(GtkWidget *entry)  
+{  
+     //1.gtk环境初始化  
+     //gtk_init(&argc, &argv);  
+	 printf("--------aqqw---%s---%d--------",__FILE__,__LINE__);
+     //2.创建一个窗口  
+     window_keyboard = gtk_window_new(GTK_WINDOW_TOPLEVEL);  
+  	 //居中
+	 gtk_window_set_position(GTK_WINDOW(window_keyboard), GTK_WIN_POS_CENTER);
+	 //gtk_window_move(GTK_WINDOW(window),20)
+     //3.创建一个表格容器5行4列  
+     GtkWidget *table = gtk_table_new(5,4,TRUE);  
+     //将table加入到window中  
+     gtk_container_add(GTK_CONTAINER(window_keyboard), table);  
+  
+     //4.创建一个行编辑  
+     //GtkWidget *entry = gtk_entry_new();  
+     //设置行编辑的内容  
+     //gtk_entry_set_text(GTK_ENTRY(entry), "2+2=4");  
+     //设置行编辑不允许编辑，只能显示用  
+     gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);  
+  
+     //5.创建多个按钮  
+     GtkWidget *button0 = gtk_button_new_with_label("0");//数值键0  
+     GtkWidget *button1 = gtk_button_new_with_label("1");//数值键1  
+     GtkWidget *button2 = gtk_button_new_with_label("2");//数值键2  
+     GtkWidget *button3 = gtk_button_new_with_label("3");//数值键3  
+     GtkWidget *button4 = gtk_button_new_with_label("4");//数值键4  
+     GtkWidget *button5 = gtk_button_new_with_label("5");//数值键5  
+     GtkWidget *button6 = gtk_button_new_with_label("6");//数值键6  
+     GtkWidget *button7 = gtk_button_new_with_label("7");//数值键7  
+     GtkWidget *button8 = gtk_button_new_with_label("8");//数值键8  
+     GtkWidget *button9 = gtk_button_new_with_label("9");//数值键9  
+  
+     GtkWidget *button_add = gtk_button_new_with_label("+");//加号  
+     GtkWidget *button_minus = gtk_button_new_with_label("-");//减号  
+     GtkWidget *button_mul = gtk_button_new_with_label("*");//乘号  
+     GtkWidget *button_div = gtk_button_new_with_label("/");//除号  
+     GtkWidget *button_equal = gtk_button_new_with_label("=");//等号  
+     GtkWidget *button_delete = gtk_button_new_with_label("c");//退格键  
+  
+     //6.布局将上面的按钮均放入table容器中  
+     //gtk_table_attach_defaults(GTK_TABLE(table), entry, 0, 4, 0, 1);  
+  
+     gtk_table_attach_defaults(GTK_TABLE(table), button0, 0, 1, 4, 5);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button1, 0, 1, 3, 4);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button2, 1, 2, 3, 4);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button3, 2, 3, 3, 4);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button4, 0, 1, 2, 3);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button5, 1, 2, 2, 3);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button6, 2, 3, 2, 3);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button7, 0, 1, 1, 2);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button8, 1, 2, 1, 2);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button9, 2, 3, 1, 2);  
+  
+     gtk_table_attach_defaults(GTK_TABLE(table), button_add, 1, 2, 4, 5);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button_minus, 2, 3, 4, 5);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button_mul , 3, 4, 2, 3);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button_div, 3, 4, 3, 4);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button_equal, 3, 4, 4, 5);  
+     gtk_table_attach_defaults(GTK_TABLE(table), button_delete, 3, 4, 1, 2);  
+  
+     //7.注册信号函数，把entry传给回调函数deal_num()  
+     g_signal_connect(button0, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button1, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button2, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button3, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button4, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button5, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button6, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button7, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button8, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button9, "pressed", G_CALLBACK(deal_num), entry);  
+  
+     g_signal_connect(button_add, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button_mul, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button_div, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button_minus, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button_equal, "pressed", G_CALLBACK(deal_num), entry);  
+     g_signal_connect(button_delete, "pressed", G_CALLBACK(deal_num), entry);
+     //失去焦点则关闭键盘
+     g_signal_connect_swapped(window_keyboard,"focus_out_event",G_CALLBACK(gtk_widget_destroy),window_keyboard); 
+  
+     //7.显示所有控件  
+     gtk_widget_show_all(window_keyboard);  
+  
+     //8.主事件循环  
+     //gtk_main();  
+  
+     return 0;  
+}
+/*add end*/
+ 
 void
 gtk_main_do_event (GdkEvent *event)
 {
+  GtkWidget *event_entry;
   GtkWidget *event_widget;
   GtkWidget *grab_widget = NULL;
   GtkWidget *topmost_widget = NULL;
@@ -1501,6 +1651,7 @@ gtk_main_do_event (GdkEvent *event)
   GdkEvent *rewritten_event = NULL;
   GdkDevice *device;
   GList *tmp_list;
+  char jp_flag;
 
   if (event->type == GDK_SETTING)
     {
@@ -1761,7 +1912,7 @@ gtk_main_do_event (GdkEvent *event)
       g_assert_not_reached ();
       break;
     }
-
+  
   if (event->type == GDK_ENTER_NOTIFY
       || event->type == GDK_LEAVE_NOTIFY
       || event->type == GDK_BUTTON_PRESS
@@ -1774,6 +1925,18 @@ gtk_main_do_event (GdkEvent *event)
       || event->type == GDK_TOUCH_UPDATE
       || event->type == GDK_SCROLL)
     {
+      if(event->type == GDK_ENTER_NOTIFY)
+      {
+      	printf("--------%s---%d---%d--------",__FILE__,__LINE__,event->type);
+      	event_entry = gtk_get_event_widget(event);
+      	gtk_jsq(event_entry);
+      	jp_flag = '1';
+      }
+      else if(event->type == 11 && jp_flag == '1')
+      {
+      	jp_flag = '0';
+      	gtk_widget_hide(window_keyboard);
+      }
       _gtk_tooltip_handle_event (event);
     }
 

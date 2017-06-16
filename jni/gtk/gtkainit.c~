@@ -82,14 +82,21 @@ void android_gtk_window_class_constructed(GObject *object)
 static void adjust_default_font()
 {
     GtkSettings *settings = gtk_settings_get_default();
+    
     const gchar *font = gdk_android_get_default_font();
+    
     g_assert(settings != NULL);
+    
 
     if (font)
     {
+    
         gtk_settings_set_string_property(settings, "gtk-font-name", font, "gtk_android_init");
+    
         g_info("Default GTK+ font is set to '%s'", font);
+    
     }
+    
 }
 
 static gtk_window_tweak_class()
@@ -122,23 +129,23 @@ static void onActivityDestroy(ANativeActivity* activity)
 void gtk_android_init(struct android_app *state)
 {
     
-	LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+	
     _gtk_android_glue_app = state;
-	LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+	
     g_log_set_default_handler(log_handler, NULL);
-	LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+	
     gdk_android_setup_app_callbacks(state, gtk_main_quit);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
     gdk_android_process_events_until_display_ready(state);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
     gtk_window_tweak_class();
-	LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+	
     gtk_init(NULL, NULL);
-	LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
-    // g_object_get(settings, "gtk-font-name", &font_name, NULL);
-    adjust_default_font();
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+	
+    //g_object_get(settings, "gtk-font-name", &font_name, NULL);
+    //adjust_default_font();
+    
 }
 
 void gtk_android_exit(struct android_app *state)

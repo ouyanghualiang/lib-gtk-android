@@ -801,7 +801,7 @@ _g_io_module_get_default (const gchar         *extension_point,
 			  const gchar         *envvar,
 			  GIOModuleVerifyFunc  verify_func)
 {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   static GRecMutex default_modules_lock;
   static GHashTable *default_modules;
   const char *use_this;
@@ -811,96 +811,96 @@ _g_io_module_get_default (const gchar         *extension_point,
   gpointer impl;
 
   g_rec_mutex_lock (&default_modules_lock);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   if (default_modules)
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       gpointer key;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       if (g_hash_table_lookup_extended (default_modules, extension_point,
 					&key, &impl))
 	{
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	  g_rec_mutex_unlock (&default_modules_lock);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	  return impl;
 	}
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
     }
   else
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       default_modules = g_hash_table_new (g_str_hash, g_str_equal);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
     }
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   _g_io_modules_ensure_loaded ();
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   ep = g_io_extension_point_lookup (extension_point);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   if (!ep)
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_warn_if_reached ();
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_rec_mutex_unlock (&default_modules_lock);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       return NULL;
     }
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   use_this = envvar ? g_getenv (envvar) : NULL;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   if (use_this)
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       preferred = g_io_extension_point_get_extension_by_name (ep, use_this);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       if (preferred)
 	{
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	  impl = try_implementation (preferred, verify_func);
 	  if (impl)
 	    goto done;
 	}
       else
 	g_warning ("Can't find module '%s' specified in %s", use_this, envvar);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
     }
   else
     preferred = NULL;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   for (l = g_io_extension_point_get_extensions (ep); l != NULL; l = l->next)
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       extension = l->data;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       if (extension == preferred)
 	continue;
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       impl = try_implementation (extension, verify_func);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       if (impl)
 	goto done;
     }
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   impl = NULL;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
  done:
   g_hash_table_insert (default_modules,
 		       g_strdup (extension_point),
 		       impl ? g_object_ref (impl) : NULL);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   g_rec_mutex_unlock (&default_modules_lock);
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   return impl;
 }
 
@@ -985,100 +985,100 @@ _g_io_modules_ensure_extension_points_registered (void)
   static gboolean registered_extensions = FALSE;
   GIOExtensionPoint *ep;
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   G_LOCK (registered_extensions);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   
   if (!registered_extensions)
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       registered_extensions = TRUE;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       
 #ifdef G_OS_UNIX
 #if !GLIB_CHECK_VERSION (3, 0, 0)
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       ep = g_io_extension_point_register (G_DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_DESKTOP_APP_INFO_LOOKUP);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       G_GNUC_END_IGNORE_DEPRECATIONS
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #endif
       
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       ep = g_io_extension_point_register (G_LOCAL_DIRECTORY_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, NULL);//G_TYPE_LOCAL_DIRECTORY_MONITOR);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       ep = g_io_extension_point_register (G_LOCAL_FILE_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, NULL);//G_TYPE_LOCAL_FILE_MONITOR);
       
       ep = g_io_extension_point_register (G_NFS_DIRECTORY_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, NULL);//G_TYPE_LOCAL_DIRECTORY_MONITOR);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_NFS_FILE_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, NULL);//G_TYPE_LOCAL_FILE_MONITOR);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_VOLUME_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, NULL);//G_TYPE_VOLUME_MONITOR);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       
       ep = g_io_extension_point_register (G_NATIVE_VOLUME_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, NULL);//G_TYPE_NATIVE_VOLUME_MONITOR);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       
       ep = g_io_extension_point_register (G_VFS_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_VFS);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register ("gsettings-backend");
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_OBJECT);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_PROXY_RESOLVER_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_PROXY_RESOLVER);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_PROXY_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_PROXY);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_TLS_BACKEND_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_TLS_BACKEND);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_NETWORK_MONITOR_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_NETWORK_MONITOR);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       ep = g_io_extension_point_register (G_NOTIFICATION_BACKEND_EXTENSION_POINT_NAME);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_extension_point_set_required_type (ep, G_TYPE_NOTIFICATION_BACKEND);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
     }
   
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   G_UNLOCK (registered_extensions);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 }
 
 void
@@ -1088,143 +1088,143 @@ _g_io_modules_ensure_loaded (void)
   const char *module_path;
   GIOModuleScope *scope;
   const gchar *module_dir;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   _g_io_modules_ensure_extension_points_registered ();
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   
   G_LOCK (loaded_dirs);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   if (!loaded_dirs)
     {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       loaded_dirs = TRUE;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       /* First load any overrides, extras */
       module_path = g_getenv ("GIO_EXTRA_MODULES");
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       if (module_path)
 	{
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	  gchar **paths;
 	  int i;
 
 	  paths = g_strsplit (module_path, G_SEARCHPATH_SEPARATOR_S, 0);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
 	  for (i = 0; paths[i] != NULL; i++)
 	    {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	      g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	    }
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	  g_strfreev (paths);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	}
 
       /* Then load the compiled in path */
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       module_dir = g_getenv ("GIO_MODULE_DIR");
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       if (module_dir == NULL)
 	  {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
         module_dir = GIO_MODULE_DIR;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 	  }
 
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_io_modules_scan_all_in_directory_with_scope (module_dir, scope);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       g_io_module_scope_free (scope);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
       /* Initialize types from built-in "modules" */
       g_type_ensure (g_null_settings_backend_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (g_memory_settings_backend_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #if defined(HAVE_INOTIFY_INIT1)
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_inotify_directory_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_inotify_file_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #if defined(HAVE_KQUEUE)
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_kqueue_directory_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_kqueue_file_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #if defined(HAVE_FEN)
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_fen_directory_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_fen_file_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #ifdef G_OS_WIN32
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_win32_volume_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (g_win32_directory_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (g_registry_backend_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #ifdef HAVE_CARBON
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_nextstep_settings_backend_get_type ();
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #ifdef G_OS_UNIX
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (NULL);//_g_unix_volume_monitor_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (NULL);//g_fdo_notification_backend_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (NULL);//g_gtk_notification_backend_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
 #ifdef G_OS_WIN32
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_winhttp_vfs_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_local_vfs_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_dummy_proxy_resolver_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_socks4a_proxy_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_socks4_proxy_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_socks5_proxy_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_dummy_tls_backend_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (g_network_monitor_base_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #ifdef HAVE_NETLINK
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
       g_type_ensure (_g_network_monitor_netlink_get_type ());
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 #endif
     }
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 
   G_UNLOCK (loaded_dirs);
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 }
 
 static void
@@ -1309,9 +1309,9 @@ void
 g_io_extension_point_set_required_type (GIOExtensionPoint *extension_point,
 					GType              type)
 {
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
   extension_point->required_type = type;
-    LOGW("--------------%s-------%d--------------",__FILE__,__LINE__);
+    
 }
 
 /**
